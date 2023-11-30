@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Learn morse code</title>
+  <link rel="stylesheet" href="reset.css">
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+  <main>
+    <div id="input-visual"></div>
+    <div id="fixed-icons">
+      <img id="about-icon" class="icon-button" src="about-icon.png" title='Open "about" section'
+        alt="question mark icon">
+      <img id="morse-icon" class="icon-button" src="morse-icon.png" title='Open "morse" section' alt="morse code icon">
+    </div>
+    <section id="about-section">
+
+      <h2>What is this ?</h2>
+      <div>
+        <p>This us blablabla</p>
+        <p>More blablablablablablablablablablablablablablabla blablablablablabla blablabla blablablablablablablablabla
+        </p>
+      </div>
+      <hr />
+      <h2>How does it work ?</h2>
+      <div></div>
+      <hr />
+      <h2>Made with :</h2>
+      <div></div>
+      <hr />
+    </section>
+    <section id="morse-section">
+
+      <h2>Morse</h2>
+      <div></div>
+      <hr>What
+    </section>
+    <section id="preview-section">
+      <textarea disabled name="" id="morsePreviewArea" cols="30" rows="10"></textarea>
+      <textarea disabled name="" id="textPreviewArea" cols="30" rows="10"></textarea>
+
+    </section>
+  </main>
+  <script src="morse-decoder.js"></script>
+  <script src="InputToMorse.js"></script>
+  <script src="script.js">
+  </script>
+</body>
+
+
+</html>

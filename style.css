@@ -1,0 +1,126 @@
+html,
+body {
+  margin: 0px;
+  padding: 0px;
+  height: 100vh;
+  font-family: 'Fira Code', monospace;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-image: url('./office.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, .4)
+}
+
+textarea {
+  resize: none;
+  font-weight: 600;
+}
+
+h2 {
+  margin: 30px;
+  font-size: 2rem;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+main>div {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: white;
+}
+
+textarea {
+  width: 90%;
+  margin: 0 auto;
+}
+
+#input-visual {
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  width: 80px;
+  height: 80px;
+  border-radius: 100%;
+  background: rgb(208, 239, 255);
+  border: 15px solid rgb(142, 193, 216);
+  box-shadow: inset 0px 0px 15px 14px rgba(0, 0, 0, 0.5);
+  transition: all .05s ease;
+}
+
+#input-visual.down {
+  filter: brightness(.8);
+  transform: scale(0.99)
+}
+
+#fixed-icons {
+  position: fixed;
+  width: fit-content;
+  z-index: 10;
+  top: 15px;
+  right: 15px;
+}
+
+#fixed-icons .icon-button {
+  height: 60px;
+  border-radius: 100%;
+  box-shadow: 0px 0px 20px 5px #000000;
+  background: rgba(0, 0, 0, .6);
+  cursor: pointer;
+}
+
+
+
+/**
+* SLIDE-IN SECTIONS
+*/
+#about-section {
+  top: -100vh;
+}
+#morse-section {
+  top: 100vh;
+}
+#about-section.show, #morse-section.show {
+  top: 0vh; 
+}
+#about-section,  #morse-section {
+  position: fixed;
+  height: 90vh;
+  width: 94vw;
+  padding: 5vh 3vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: top .3s ease;
+  background: black;
+  color: white;
+  opacity: .85
+}
+#about-section>div {
+  width: 50%;
+}
+#about-section p {  
+  margin: 20px;
+  text-indent: 2rem;
+}
+
+section hr {
+  opacity: .3;
+  width: 30%;
+  margin: 20px;
+}
