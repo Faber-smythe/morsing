@@ -10,7 +10,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-image: url('./office.jpg');
+  background-image: url('/assets/img/office.jpg');
   background-repeat: no-repeat;
   background-size: cover;
 }
@@ -35,6 +35,10 @@ h2 {
   font-size: 2rem;
   text-align: center;
   text-transform: uppercase;
+}
+
+a{
+  text-decoration: underline;
 }
 
 main>div {
