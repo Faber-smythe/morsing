@@ -1,17 +1,29 @@
 window.onload = function () {
+    var Scrollbar = window["Scrollbar"];
+    console.log(Scrollbar);
+    var accuracyScoreSpan = document.getElementById('accuracy-score');
     var sections = {
         about: document.getElementById("about-section"),
         morse: document.getElementById("morse-section"),
+        babylon: document.getElementById("babylon-scene-section"),
     };
     var iconButtons = {
         about: document.getElementById("about-icon"),
         morse: document.getElementById("morse-icon"),
     };
+    Object.values(sections).forEach(function (section) {
+        console.log(section);
+        if (section.classList.contains("fixed"))
+            return;
+        Scrollbar.init(section);
+    });
     /**
      * ICON CLICKS TO SLIDE PANELS IN & OUT
      */
     var closeAllSlideSection = function () {
         Object.entries(sections).forEach(function (sectionEntry) {
+            if (sectionEntry[1].classList.contains("fixed"))
+                return;
             sectionEntry[1].classList.remove("show");
             iconButtons[sectionEntry[0]].src = "assets/img/" + sectionEntry[0] + "-icon.png";
             iconButtons[sectionEntry[0]].title = "Open \"" + sectionEntry[0] + "\" section";
@@ -36,7 +48,36 @@ window.onload = function () {
      * INSTANTIATE MORSE LISTENER CLASS
      */
     var morseController = new InputToMorse();
-    morseController.startListening();
+    var customDownTrigger = function () {
+        document.addEventListener("keydown", function (e) {
+            if (e.code == "Space") {
+                morseController.down();
+                // TODO babyloncontroller keydown
+            }
+        });
+    };
+    var customUpTrigger = function () {
+        document.addEventListener("keyup", function (e) {
+            if (e.code == "Space") {
+                morseController.up();
+                if (morseController.accuracyScore) {
+                    accuracyScoreSpan.innerHTML = Math.round(morseController.accuracyScore).toString() + "%";
+                }
+                // TODO babyloncontroller keyup
+            }
+        });
+    };
+    document.getElementById("delete-input-icon").addEventListener('click', function () {
+        morseController.wipe(true);
+    });
+    morseController.startListening(customDownTrigger, customUpTrigger);
+    /**
+     * INSTANTIATE BABYLON CONTROLLER
+     */
+    var canvas = sections.babylon.querySelector("canvas");
+    var babylonController = new BabylonController(canvas);
+    babylonController.setUp();
+    babylonController.start();
     /**
      * LISTEN TO KEYBOARD EVENTS
      */

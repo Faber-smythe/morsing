@@ -35,24 +35,25 @@ class InputToMorse {
   private lastToggleStamp;
   private delaySinceLastToggle = 0;
   private calibration = { averageDit: DEFAULT_DIT_LENGTH, range: 1 }
+  public accuracyScore
 
   public down = () => {
     if (this.isDown) return;
     this.isDown = true;
-
-    inputVisual.classList.add("down");
     this.handleToggle();
   }
 
   public up = () => {
-    console.log("UP !")
-    inputVisual.classList.remove("down");
     this.isDown = false;
 
     this.handleToggle();
     this.recalibrate();
     this.updateMorsePreview();
     this.updateTextPreview();
+    // compute accuracy score based on the 3 last values
+    if (this.recording.all.length > 15) {
+      this.updateAccuracyScore();
+    }
   }
   public recording: Recording = { all: [], signals: [], spaces: [] };
   public morsePreview = ""
@@ -120,21 +121,61 @@ class InputToMorse {
   }
 
   wipe(keepCalibration: boolean = false) {
-    if (keepCalibration) {
-      this.calibration = { averageDit: DEFAULT_DIT_LENGTH, range: 20 }
-      this.recording = { all: [], signals: [], spaces: [] }
-      this.updateMorsePreview()
-      this.updateTextPreview()
-    } else {
-      this.calibration.averageDit = DEFAULT_DIT_LENGTH
-      this.recording = { all: [], signals: [], spaces: [] }
-      this.updateMorsePreview()
-      this.updateTextPreview()
-    }
+    // if (keepCalibration) {
+    //   this.calibration = { averageDit: DEFAULT_DIT_LENGTH, range: 20 }
+    //   this.recording = { all: [], signals: [], spaces: [] }
+    //   this.updateMorsePreview()
+    //   this.updateTextPreview()
+    // } else {
+    this.calibration.averageDit = DEFAULT_DIT_LENGTH
+    this.recording = { all: [], signals: [], spaces: [] }
+    this.lastToggleStamp = undefined;
+    this.delaySinceLastToggle = 0;
+    this.updateMorsePreview()
+    this.updateTextPreview()
+    // }
+  }
+
+  updateAccuracyScore = () => {
+    const amount = 3
+    const lastRecordings = this.recording.all.slice(-amount).reverse()
+    const lastTheoreticals = []
+    const lastAccuracies = []
+
+    const morseInputWithSpaceInserts = Array.from(this.morsePreview).join(" ")
+    const morseInputWithOSpaces = morseInputWithSpaceInserts
+      .replace("   /   ", "O")
+      .replace("   /", "O")
+      .replace(new RegExp('   ', "g"), "o")
+
+    const lastMorseInputs = Array.from(morseInputWithOSpaces).slice(-amount).reverse()
+    lastMorseInputs.forEach(input => {
+      switch (input) {
+        case '.':
+        case ' ':
+          lastTheoreticals.push([this.calibration.averageDit, 1])
+          break;
+        case '-':
+        case 'o':
+          lastTheoreticals.push([this.calibration.averageDit * 3, 3])
+          break;
+        case 'O':
+          lastTheoreticals.push([this.calibration.averageDit * 7, 7])
+          break;
+        default:
+          console.error("Uncaught morse input while computing accuracy score : ", input)
+          break;
+      }
+    })
+    lastRecordings.forEach((duration, i) => {
+      // offset is less considered for longer durations
+      const offset = Math.abs(duration - lastTheoreticals[i][0]) / lastTheoreticals[i][1]
+      lastAccuracies.push(100 - (offset / lastTheoreticals[i][0] * 100))
+    })
+    this.accuracyScore = (lastAccuracies.reduce((a, b) => (a + b)) / lastAccuracies.length).toFixed(2)
   }
 
   /**
-   *
    * Calibration is based on signals and not spaces in order to filter out long pauses
    */
   recalibrate() {
@@ -145,7 +186,7 @@ class InputToMorse {
 
     this.calibration.range++;
 
-    // getting the last 20 signals sorted by length
+    // getting the last 30 signals sorted by length
     let sortedDowns;
     if (this.recording.signals.length > CALIBRATION_RANGE) {
       sortedDowns = [...this.recording.signals.slice(-CALIBRATION_RANGE)];
@@ -153,7 +194,7 @@ class InputToMorse {
       sortedDowns = [...this.recording.signals];
     }
     sortedDowns.sort((a, b) => a - b);
-
+    console.log(sortedDowns)
     // going through signals to find the biggest difference between two signals
     // this will be the difference between longest dit and shortest dash
     let indexOfShortestDash = 0;
@@ -168,14 +209,14 @@ class InputToMorse {
       return dif;
     });
 
-    // infering average duration of a dit from all last 20 signals
+    // infering average duration of a dit from all last [30] signals
     const dots = sortedDowns.slice(0, indexOfShortestDash);
     const dashes = sortedDowns.slice(indexOfShortestDash);
+    console.log(dots, dashes)
     if (this.calibration.range >= CALIBRATION_RANGE) {
       this.calibration.range = CALIBRATION_RANGE
       this.calibration.averageDit =
-        this.calibration.averageDit +
-        (sortedDowns.reduce((a, b) => a + b) / (dots.length + dashes.length * 3)) / 2
+        (this.calibration.averageDit + sortedDowns.reduce((a, b) => a + b) / (dots.length + dashes.length * 3)) / 2
     } else {
       this.calibration.averageDit =
         sortedDowns.reduce((a, b) => a + b) / (dots.length + dashes.length * 3);
@@ -189,14 +230,15 @@ class InputToMorse {
   };
 
   updateTextPreview() {
-    this.textPreview = morse.decode(this.morsePreview);
-    textPreviewArea.innerHTML = this.textPreview;
+    if (this.morsePreview == "") {
+      textPreviewArea.innerHTML = ""
+    } else {
+      this.textPreview = morse.decode(this.morsePreview);
+      textPreviewArea.innerHTML = this.textPreview;
+    }
   };
 
   interpretMorse() {
-    // console.log("RECORDED : ", this.recording.all);
-    // console.log("SPACES : ", this.recording.spaces);
-    // console.log("INTERPRETING...");
     let group;
     let closestIndex = 0;
 
