@@ -160,11 +160,11 @@ class BabylonController {
     this.candleLight.diffuse = new BABYLON.Color3(1, 191 / 255, 93 / 255)
     this.candleLight.position = new BABYLON.Vector3(.31, .35, .56)
     this.candleLight.intensity = 1.5;
-    const flickerEase = "rough({template: none.out,strength: 2, points: 10, taper: none, randomize: true, clamp: false})"
+    const flickerEase = "rough({template: none.out,strength: 1, points: 10, taper: none, randomize: true, clamp: false})"
     const flickerTimeline = GSAP.timeline({ repeat: -1 });
-    flickerTimeline.to(this.candleLight, { intensity: 1, duration: 1, ease: flickerEase });
-    flickerTimeline.to(this.candleLight, { intensity: 1.4, duration: 1, ease: flickerEase });
     flickerTimeline.to(this.candleLight, { intensity: 1.2, duration: 1, ease: flickerEase });
+    flickerTimeline.to(this.candleLight, { intensity: 1.4, duration: 1, ease: flickerEase });
+    flickerTimeline.to(this.candleLight, { intensity: 1.3, duration: 1, ease: flickerEase });
     flickerTimeline.to(this.candleLight, { intensity: 1.5, duration: 1, ease: flickerEase });
 
     this.worldLight = new BABYLON.HemisphericLight("worldLight", new BABYLON.Vector3(-6, 5, 0), this.scene);
