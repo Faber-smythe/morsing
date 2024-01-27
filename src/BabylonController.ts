@@ -33,6 +33,7 @@ class BabylonController {
   }
 
   setUp() {
+
     this.setUpCamera()
 
     this.skydome = new BABYLON.PhotoDome(
@@ -73,8 +74,13 @@ class BabylonController {
             break;
           case "wall-group":
             mesh.material = new BABYLON.StandardMaterial(`${mesh.name}_mat`, this.scene)
-            const wallText = new BABYLON.Texture(assetPath + "/assets/3Dscene/wallpaper.jpg", this.scene)
+            const wallText = new BABYLON.Texture(assetPath + "/assets/3Dscene/wallpaper2.jpg", this.scene)
             wallText.wAng = Math.PI
+            wallText.uScale = 2.5
+            wallText.vScale = 2.5
+            wallText.uAng = BabylonController.degToRad(20)
+            wallText.vAng = BabylonController.degToRad(20)
+
             mesh.material.diffuseTexture = wallText
             mesh.material.specularColor = BABYLON.Color3.Black()
             break;
@@ -116,6 +122,7 @@ class BabylonController {
   setUpCamera() {
     // This creates and positions a free camera (non-mesh)
     this.camera = new BABYLON.ArcRotateCamera("camera", 0, 0, this.cameraInitialRadius, new BABYLON.Vector3(0, .1, 0));
+    this.camera.attachControl(this.canvas, true)
     this.camera.minZ = .10
 
     this.camera.lowerRadiusLimit = .3
@@ -125,7 +132,6 @@ class BabylonController {
     this.camera.wheelDeltaPercentage = 0.005
     this.camera.inertia = .98
 
-    this.camera.attachControl(this.canvas, true)
 
     this.canvas.addEventListener("mousemove", (e) => {
       const widthTravelRatio = (e.x - window.innerWidth / 2) / (window.innerWidth / 2)
@@ -153,7 +159,13 @@ class BabylonController {
     this.candleLight = new BABYLON.PointLight("candleLight", new BABYLON.Vector3(0, 0, 0), this.scene);
     this.candleLight.diffuse = new BABYLON.Color3(1, 191 / 255, 93 / 255)
     this.candleLight.position = new BABYLON.Vector3(.31, .35, .56)
-    this.candleLight.intensity = 2;
+    this.candleLight.intensity = 1.5;
+    const flickerEase = "rough({template: none.out,strength: 2, points: 10, taper: none, randomize: true, clamp: false})"
+    const flickerTimeline = GSAP.timeline({ repeat: -1 });
+    flickerTimeline.to(this.candleLight, { intensity: 1, duration: 1, ease: flickerEase });
+    flickerTimeline.to(this.candleLight, { intensity: 1.4, duration: 1, ease: flickerEase });
+    flickerTimeline.to(this.candleLight, { intensity: 1.2, duration: 1, ease: flickerEase });
+    flickerTimeline.to(this.candleLight, { intensity: 1.5, duration: 1, ease: flickerEase });
 
     this.worldLight = new BABYLON.HemisphericLight("worldLight", new BABYLON.Vector3(-6, 5, 0), this.scene);
     this.worldLight.intensity = .4;

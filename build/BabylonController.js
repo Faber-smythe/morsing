@@ -49,8 +49,12 @@ var BabylonController = /** @class */ (function () {
                         break;
                     case "wall-group":
                         mesh.material = new BABYLON.StandardMaterial(mesh.name + "_mat", _this.scene);
-                        var wallText = new BABYLON.Texture(assetPath + "/assets/3Dscene/wallpaper.jpg", _this.scene);
+                        var wallText = new BABYLON.Texture(assetPath + "/assets/3Dscene/wallpaper2.jpg", _this.scene);
                         wallText.wAng = Math.PI;
+                        wallText.uScale = 2.5;
+                        wallText.vScale = 2.5;
+                        wallText.uAng = BabylonController.degToRad(20);
+                        wallText.vAng = BabylonController.degToRad(20);
                         mesh.material.diffuseTexture = wallText;
                         mesh.material.specularColor = BABYLON.Color3.Black();
                         break;
@@ -89,6 +93,7 @@ var BabylonController = /** @class */ (function () {
         var _this = this;
         // This creates and positions a free camera (non-mesh)
         this.camera = new BABYLON.ArcRotateCamera("camera", 0, 0, this.cameraInitialRadius, new BABYLON.Vector3(0, .1, 0));
+        this.camera.attachControl(this.canvas, true);
         this.camera.minZ = .10;
         this.camera.lowerRadiusLimit = .3;
         this.camera.upperRadiusLimit = .95;
@@ -96,7 +101,6 @@ var BabylonController = /** @class */ (function () {
         this.camera.wheelDeltaPercentage = 0.01;
         this.camera.wheelDeltaPercentage = 0.005;
         this.camera.inertia = .98;
-        this.camera.attachControl(this.canvas, true);
         this.canvas.addEventListener("mousemove", function (e) {
             var widthTravelRatio = (e.x - window.innerWidth / 2) / (window.innerWidth / 2);
             var heighTravelRatio = (e.y - window.innerHeight / 2) / (window.innerHeight / 2);
@@ -122,7 +126,13 @@ var BabylonController = /** @class */ (function () {
         this.candleLight = new BABYLON.PointLight("candleLight", new BABYLON.Vector3(0, 0, 0), this.scene);
         this.candleLight.diffuse = new BABYLON.Color3(1, 191 / 255, 93 / 255);
         this.candleLight.position = new BABYLON.Vector3(.31, .35, .56);
-        this.candleLight.intensity = 2;
+        this.candleLight.intensity = 1.5;
+        var flickerEase = "rough({template: none.out,strength: 2, points: 10, taper: none, randomize: true, clamp: false})";
+        var flickerTimeline = GSAP.timeline({ repeat: -1 });
+        flickerTimeline.to(this.candleLight, { intensity: 1, duration: 1, ease: flickerEase });
+        flickerTimeline.to(this.candleLight, { intensity: 1.4, duration: 1, ease: flickerEase });
+        flickerTimeline.to(this.candleLight, { intensity: 1.2, duration: 1, ease: flickerEase });
+        flickerTimeline.to(this.candleLight, { intensity: 1.5, duration: 1, ease: flickerEase });
         this.worldLight = new BABYLON.HemisphericLight("worldLight", new BABYLON.Vector3(-6, 5, 0), this.scene);
         this.worldLight.intensity = .4;
         // this.worldLight.excludedMeshes.push(this.scene.getMeshByName("skymap_mesh"));
