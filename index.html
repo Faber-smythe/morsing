@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Learn morse code</title>
+  <link rel="stylesheet" href="assets/css/reset.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+  <main>
+    <div id="input-visual"></div>
+    <div id="fixed-icons">
+      <img id="about-icon" class="icon-button" src="assets/img/about-icon.png" title='Open "about" section'
+        alt="question mark icon">
+      <img id="morse-icon" class="icon-button" src="assets/img/morse-icon.png" title='Open "morse" section'
+        alt="morse code icon">
+    </div>
+    <section id="babylon-scene-section" class="fixed">
+      <canvas></canvas>
+    </section>
+    <section id="about-section">
+
+      <div class="content">
+        <h2>What is this ?</h2>
+        <div>
+          <p>This custom project started as a challenge to convert keyboard inputs to morse code. It grew into a single
+            page discovery tool to learn morse. It also acts as a showcase of how 3D can enhance web experience.
+          </p>
+        </div>
+        <hr />
+        <h2>What do I do with it ?</h2>
+        <div>
+          <p>This tool is meant to be used two ways. You can write morse code by holding and letting go of the SPACE
+            key,
+            and see what your code translates to. Or you can write in plain text and see how it encodes in morse. </p>
+          <p>Several tools can assist you. A help panel provides international morse alphabet for reference. An accuracy
+            score shows how steady and even your morse inputs are.</p>
+        </div>
+        <hr />
+        <h2>What is it made with ?</h2>
+        <div>
+          <p> No programming framework has been used for this page. You can find the <a target="_blank"
+              href="https://github.com/Faber-smythe/morsing">Github source code here</a>.
+          </p>
+          <p>
+            The keyboard-to-morse encoding is done with a custom script. The morse-to-alphabet translation is handled by
+            a
+            third party library (credits to <a target="_blank"
+              href="https://github.com/ozdemirburak/morse-decoder/tree/master">OZDEMIRBURAK</a>).
+          </p>
+          <p>The 3D background uses Babylon.js, an opensource engine by Microsoft designed for the web.</p>
+          <p>All the scripts are made using Typescript.</p>
+        </div>
+        <hr />
+      </div>
+    </section>
+    <section id="morse-section">
+      <h2>How does morse code work ?</h2>
+      <div>
+        <p>Writing morse is a matter of timing. The code is made of sounds and spaces. Holding the key down will play
+          a continuous signal until the key is released. There is no specific length to these signals, they have to be
+          steady and proportional.</p>
+        <p>There are two kinds of sounds : dots and dashes. A dot is the shortest duration, and act as the duration
+          unit. A dash lasts as long as three dots.</p>
+        <p>There are three kinds of spaces : signal spaces have the same duration as a dot, and are used between each
+          signals (they translate to nothing in morse). Letter spaces last three dots, and are used between letters
+          (they translate to a single space in morse). Word spaces last seven dots, and are used between words (they
+          translate to a / in morse).</p>
+        <p>For example, if you send a signal with a rythm of 1 dot = 1 second, this is how you would send an SOS : <br>
+          Hold the key 1 second. Release and wait 1 second. Hold 1 second. Release 1 second. Hold 1 second.<br>
+          Wait 3 seconds.<br>
+          Hold the key 3 seconds. Release 1 second. Hold 3 seconds. Release 1 second. Hold 3 seconds.<br>
+          Wait 3 seconds.<br>
+          Hold the key 1 second. Release and wait 1 second. Hold 1 second. Release 1 second. Hold 1 second.<br>
+        </p>
+        <p>Try it out ! The international code is below for reference.</p>
+
+      </div>
+      <hr>
+      <h2>International Morse Code</h2>
+      <div>
+        <table>
+          <thead>
+            <tr>
+              <th>
+                <span>A</span><br>
+                <span>B</span><br>
+                <span>C</span><br>
+                <span>D</span><br>
+                <span>E</span><br>
+                <span>F</span><br>
+                <span>G</span><br>
+                <span>H</span><br>
+                <span>I</span><br>
+                <span>J</span><br>
+                <span>K</span><br>
+                <span>L</span><br>
+                <span>M</span><br>
+                <span>N</span><br>
+                <span>O</span><br>
+                <span>P</span><br>
+                <span>Q</span><br>
+                <span>R</span><br>
+                <span>S</span><br>
+                <span>T</span><br>
+              </th>
+              <th style="text-align:left">
+                <span>· —</span><br>
+                <span>— · · ·</span><br>
+                <span>— · — ·</span><br>
+                <span>— · ·</span><br>
+                <span>·</span><br>
+                <span>· · — ·</span><br>
+                <span>— — ·</span><br>
+                <span>· · · ·</span><br>
+                <span>· ·</span><br>
+                <span>· — — —</span><br>
+                <span>— · —</span><br>
+                <span>· — · ·</span><br>
+                <span>— —</span><br>
+                <span>— ·</span><br>
+                <span>— — —</span><br>
+                <span>· — — ·</span><br>
+                <span>— — · —</span><br>
+                <span>· — ·</span><br>
+                <span>· · ·</span><br>
+                <span>—</span><br>
+
+              </th>
+              <th>
+                <span>U</span><br>
+                <span>V</span><br>
+                <span>W</span><br>
+                <span>X</span><br>
+                <span>Y</span><br>
+                <span>Z</span><br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <span>1</span><br>
+                <span>2</span><br>
+                <span>3</span><br>
+                <span>4</span><br>
+                <span>5</span><br>
+                <span>6</span><br>
+                <span>7</span><br>
+                <span>8</span><br>
+                <span>9</span><br>
+                <span>0</span><br>
+              </th>
+              <th style="text-align:left">
+                <span>· · —</span><br>
+                <span>· · · —</span><br>
+                <span>· — ——</span><br>
+                <span>— · · —</span><br>
+                <span>— · — —</span><br>
+                <span>— — · ·</span><br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <span>· — — — —</span><br>
+                <span>· · — — —</span><br>
+                <span>· · · — —</span><br>
+                <span>· · · · —</span><br>
+                <span>· · · · ·</span><br>
+                <span>— · · · ·</span><br>
+                <span>— — · · ·</span><br>
+                <span>— — — · ·</span><br>
+                <span>— — — — ·</span><br>
+                <span>— — — — —</span><br>
+              </th>
+            </tr>
+          </thead>
+        </table>
+      </div>
+    </section>
+    <section id="preview-section">
+      <span id="accuracy-score"></span>
+      <div>
+        <div class="preview-row">
+          <span>·/-</span>
+          <textarea disabled name="" id="morsePreviewArea" rows="1"></textarea>
+        </div>
+        <div class="preview-row">
+          <span>A-Z</span>
+          <textarea disabled name="" id="textPreviewArea" rows="1"></textarea>
+        </div>
+      </div>
+      <img src="assets/img/delete-icon.png" id="delete-input-icon" alt="trash bin icon" title="Delete input">
+    </section>
+  </main>
+  <script src="https://cdn.babylonjs.com/babylon.js"></script>
+  <script src="https://cdn.babylonjs.com/loaders/babylon.glTFFileLoader.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.4/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/smooth-scrollbar/8.8.4/smooth-scrollbar.min.js"
+    integrity="sha512-UOuvdHxPTS8D5IoOYOwLGAN05jYYXKhxFOZDe/24o53eOOf9ylws0uPfV+gRj/k1z17C0KtC7Vkt+5H7BLQxOA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="morse-decoder.js"></script>
+  <script src="build/InputToMorse.js"></script>
+  <script src="build/BabylonController.js"></script>
+  <script src="build/main.js">
+  </script>
+</body>
+
+
+</html>

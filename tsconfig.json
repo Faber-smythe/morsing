@@ -1,0 +1,16 @@
+{
+  "files": [
+    "src/main.ts",
+    "src/BabylonController.ts",
+    "src/InputToMorse.ts"
+  ],
+  "compilerOptions": {
+    "lib": [
+      "es6",
+      "dom",
+      "es2017"
+    ],
+    "target": "es5",
+    "outDir": "build"    
+  }
+}
