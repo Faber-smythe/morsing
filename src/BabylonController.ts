@@ -128,24 +128,30 @@ class BabylonController {
     this.camera.lowerRadiusLimit = .3
     this.camera.upperRadiusLimit = .95
     this.camera.upperBetaLimit = 1.52
+    this.camera.lowerAlphaLimit = this.cameraInitialAlpha - (Math.PI / 9)
+    this.camera.upperAlphaLimit = this.cameraInitialAlpha + (Math.PI / 9)
     this.camera.wheelDeltaPercentage = 0.01
     this.camera.wheelDeltaPercentage = 0.005
     this.camera.inertia = .98
 
+    if ("ontouchstart" in document.documentElement) {
+      document.write("Mouse sway is disabled for touch screen device ");
 
-    this.canvas.addEventListener("mousemove", (e) => {
-      const widthTravelRatio = (e.x - window.innerWidth / 2) / (window.innerWidth / 2)
-      const heighTravelRatio = (e.y - window.innerHeight / 2) / (window.innerHeight / 2)
-      GSAP.to(this.camera, { alpha: this.cameraInitialAlpha + (Math.PI / 9) * widthTravelRatio, beta: this.cameraInitialBeta + (Math.PI / 7.5) * heighTravelRatio, duration: 1 });
-    })
-    let zoomResetTimeout;
-    this.canvas.addEventListener("wheel", (e) => {
-      if (zoomResetTimeout) clearTimeout(zoomResetTimeout)
+    } else {
+      this.canvas.addEventListener("mousemove", (e) => {
+        const widthTravelRatio = (e.x - window.innerWidth / 2) / (window.innerWidth / 2)
+        const heighTravelRatio = (e.y - window.innerHeight / 2) / (window.innerHeight / 2)
+        GSAP.to(this.camera, { alpha: this.cameraInitialAlpha + (Math.PI / 9) * widthTravelRatio, beta: this.cameraInitialBeta + (Math.PI / 7.5) * heighTravelRatio, duration: 1 });
+      })
+      let zoomResetTimeout;
+      this.canvas.addEventListener("wheel", (e) => {
+        if (zoomResetTimeout) clearTimeout(zoomResetTimeout)
 
-      zoomResetTimeout = setTimeout(() => {
-        GSAP.to(this.camera, { radius: this.cameraInitialRadius, duration: 1 })
-      }, 1000)
-    })
+        zoomResetTimeout = setTimeout(() => {
+          GSAP.to(this.camera, { radius: this.cameraInitialRadius, duration: 1 })
+        }, 1000)
+      })
+    }
   }
 
   setUpLightsAndEffect() {

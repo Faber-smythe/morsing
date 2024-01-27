@@ -90,7 +90,6 @@ var BabylonController = /** @class */ (function () {
         pipeline.fxaaEnabled = true;
     };
     BabylonController.prototype.setUpCamera = function () {
-        var _this = this;
         // This creates and positions a free camera (non-mesh)
         this.camera = new BABYLON.ArcRotateCamera("camera", 0, 0, this.cameraInitialRadius, new BABYLON.Vector3(0, .1, 0));
         this.camera.attachControl(this.canvas, true);
@@ -98,22 +97,28 @@ var BabylonController = /** @class */ (function () {
         this.camera.lowerRadiusLimit = .3;
         this.camera.upperRadiusLimit = .95;
         this.camera.upperBetaLimit = 1.52;
+        this.camera.lowerAlphaLimit = this.cameraInitialAlpha - (Math.PI / 9);
+        this.camera.upperAlphaLimit = this.cameraInitialAlpha + (Math.PI / 9);
         this.camera.wheelDeltaPercentage = 0.01;
         this.camera.wheelDeltaPercentage = 0.005;
         this.camera.inertia = .98;
-        this.canvas.addEventListener("mousemove", function (e) {
-            var widthTravelRatio = (e.x - window.innerWidth / 2) / (window.innerWidth / 2);
-            var heighTravelRatio = (e.y - window.innerHeight / 2) / (window.innerHeight / 2);
-            GSAP.to(_this.camera, { alpha: _this.cameraInitialAlpha + (Math.PI / 9) * widthTravelRatio, beta: _this.cameraInitialBeta + (Math.PI / 7.5) * heighTravelRatio, duration: 1 });
-        });
-        var zoomResetTimeout;
-        this.canvas.addEventListener("wheel", function (e) {
-            if (zoomResetTimeout)
-                clearTimeout(zoomResetTimeout);
-            zoomResetTimeout = setTimeout(function () {
-                GSAP.to(_this.camera, { radius: _this.cameraInitialRadius, duration: 1 });
-            }, 1000);
-        });
+        if ("ontouchstart" in document.documentElement) {
+            document.write("Mouse sway is disabled for touch screen device ");
+        }
+        else {
+            // this.canvas.addEventListener("mousemove", (e) => {
+            //   const widthTravelRatio = (e.x - window.innerWidth / 2) / (window.innerWidth / 2)
+            //   const heighTravelRatio = (e.y - window.innerHeight / 2) / (window.innerHeight / 2)
+            //   GSAP.to(this.camera, { alpha: this.cameraInitialAlpha + (Math.PI / 9) * widthTravelRatio, beta: this.cameraInitialBeta + (Math.PI / 7.5) * heighTravelRatio, duration: 1 });
+            // })
+            // let zoomResetTimeout;
+            // this.canvas.addEventListener("wheel", (e) => {
+            //   if (zoomResetTimeout) clearTimeout(zoomResetTimeout)
+            //   zoomResetTimeout = setTimeout(() => {
+            //     GSAP.to(this.camera, { radius: this.cameraInitialRadius, duration: 1 })
+            //   }, 1000)
+            // })
+        }
     };
     BabylonController.prototype.setUpLightsAndEffect = function () {
         var _this = this;
