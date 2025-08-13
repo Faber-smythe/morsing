@@ -26,16 +26,16 @@ window.onload = function () {
             if (sectionEntry[1].classList.contains("fixed"))
                 return;
             sectionEntry[1].classList.remove("show");
-            iconButtons[sectionEntry[0]].src = "assets/img/" + sectionEntry[0] + "-icon.png";
-            iconButtons[sectionEntry[0]].title = "Open \"" + sectionEntry[0] + "\" section";
+            iconButtons[sectionEntry[0]].src = "assets/img/".concat(sectionEntry[0], "-icon.png");
+            iconButtons[sectionEntry[0]].title = "Open \"".concat(sectionEntry[0], "\" section");
         });
     };
     Object.entries(iconButtons).forEach(function (iconEntry) {
         iconEntry[1].onclick = function () {
             if (sections[iconEntry[0]].classList.contains("show")) {
                 sections[iconEntry[0]].classList.remove("show");
-                iconEntry[1].src = "assets/img/" + iconEntry[1].id + ".png";
-                iconEntry[1].title = "Open \"" + iconEntry[0] + "\" section";
+                iconEntry[1].src = "assets/img/".concat(iconEntry[1].id, ".png");
+                iconEntry[1].title = "Open \"".concat(iconEntry[0], "\" section");
             }
             else {
                 closeAllSlideSection();

@@ -44,11 +44,11 @@ var BabylonController = /** @class */ (function () {
                 switch (mesh.name) {
                     case "window":
                     case "windowhandle  ":
-                        mesh.material = new BABYLON.StandardMaterial(mesh.name + "_mat", _this.scene);
+                        mesh.material = new BABYLON.StandardMaterial("".concat(mesh.name, "_mat"), _this.scene);
                         mesh.material.diffuseTexture = new BABYLON.Texture(assetPath + "/assets/3Dscene/peinture-fenetre.jpg", _this.scene);
                         break;
                     case "wall-group":
-                        mesh.material = new BABYLON.StandardMaterial(mesh.name + "_mat", _this.scene);
+                        mesh.material = new BABYLON.StandardMaterial("".concat(mesh.name, "_mat"), _this.scene);
                         var wallText = new BABYLON.Texture(assetPath + "/assets/3Dscene/wallpaper2.jpg", _this.scene);
                         wallText.wAng = Math.PI;
                         wallText.uScale = 2.5;
@@ -59,7 +59,7 @@ var BabylonController = /** @class */ (function () {
                         mesh.material.specularColor = BABYLON.Color3.Black();
                         break;
                     case "windowframe":
-                        mesh.material = new BABYLON.StandardMaterial(mesh.name + "_mat", _this.scene);
+                        mesh.material = new BABYLON.StandardMaterial("".concat(mesh.name, "_mat"), _this.scene);
                         mesh.material.diffuseTexture = new BABYLON.Texture(assetPath + "/assets/3Dscene/windowframe.jpg", _this.scene);
                         mesh.material.specularColor = BABYLON.Color3.Black();
                     default:
@@ -90,6 +90,7 @@ var BabylonController = /** @class */ (function () {
         pipeline.fxaaEnabled = true;
     };
     BabylonController.prototype.setUpCamera = function () {
+        var _this = this;
         // This creates and positions a free camera (non-mesh)
         this.camera = new BABYLON.ArcRotateCamera("camera", 0, 0, this.cameraInitialRadius, new BABYLON.Vector3(0, .1, 0));
         this.camera.attachControl(this.canvas, true);
@@ -106,18 +107,21 @@ var BabylonController = /** @class */ (function () {
             document.write("Mouse sway is disabled for touch screen device ");
         }
         else {
-            // this.canvas.addEventListener("mousemove", (e) => {
-            //   const widthTravelRatio = (e.x - window.innerWidth / 2) / (window.innerWidth / 2)
-            //   const heighTravelRatio = (e.y - window.innerHeight / 2) / (window.innerHeight / 2)
-            //   GSAP.to(this.camera, { alpha: this.cameraInitialAlpha + (Math.PI / 9) * widthTravelRatio, beta: this.cameraInitialBeta + (Math.PI / 7.5) * heighTravelRatio, duration: 1 });
-            // })
-            // let zoomResetTimeout;
-            // this.canvas.addEventListener("wheel", (e) => {
-            //   if (zoomResetTimeout) clearTimeout(zoomResetTimeout)
-            //   zoomResetTimeout = setTimeout(() => {
-            //     GSAP.to(this.camera, { radius: this.cameraInitialRadius, duration: 1 })
-            //   }, 1000)
-            // })
+            this.canvas.addEventListener("mousemove", function (e) {
+                var reduction = 1;
+                var widthTravelRatio = (e.x - window.innerWidth / 2) / (window.innerWidth / 2);
+                var heighTravelRatio = (e.y - window.innerHeight / 2) / (window.innerHeight / 2);
+                GSAP.to(_this.camera, { alpha: _this.cameraInitialAlpha + ((Math.PI / 9) * widthTravelRatio) * reduction, beta: _this.cameraInitialBeta + ((Math.PI / 7.5) * heighTravelRatio) * reduction, duration: 1 });
+                console.log("camera sway");
+            });
+            var zoomResetTimeout_1;
+            this.canvas.addEventListener("wheel", function (e) {
+                if (zoomResetTimeout_1)
+                    clearTimeout(zoomResetTimeout_1);
+                zoomResetTimeout_1 = setTimeout(function () {
+                    GSAP.to(_this.camera, { radius: _this.cameraInitialRadius, duration: 1 });
+                }, 1000);
+            });
         }
     };
     BabylonController.prototype.setUpLightsAndEffect = function () {
@@ -180,7 +184,7 @@ var BabylonController = /** @class */ (function () {
     };
     BabylonController.prototype.start = function () {
         var _this = this;
-        // this.scene.debugLayer.show();
+        this.scene.debugLayer.show();
         this.engine.runRenderLoop(function () {
             _this.scene.render();
         });
