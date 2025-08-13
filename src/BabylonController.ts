@@ -139,11 +139,9 @@ class BabylonController {
 
     } else {
       this.canvas.addEventListener("mousemove", (e) => {
-        const reduction = 1
         const widthTravelRatio = (e.x - window.innerWidth / 2) / (window.innerWidth / 2)
         const heighTravelRatio = (e.y - window.innerHeight / 2) / (window.innerHeight / 2)
-        GSAP.to(this.camera, { alpha: this.cameraInitialAlpha + ((Math.PI / 9) * widthTravelRatio)*reduction, beta: this.cameraInitialBeta + ((Math.PI / 7.5) * heighTravelRatio)*reduction, duration: 1 });
-        console.log("camera sway")
+        GSAP.to(this.camera, { alpha: this.cameraInitialAlpha - ((Math.PI / 16) * widthTravelRatio), beta: this.cameraInitialBeta - ((Math.PI / 15) * heighTravelRatio), duration: 2 });
       })
       let zoomResetTimeout;
       this.canvas.addEventListener("wheel", (e) => {

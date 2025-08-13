@@ -108,11 +108,9 @@ var BabylonController = /** @class */ (function () {
         }
         else {
             this.canvas.addEventListener("mousemove", function (e) {
-                var reduction = 1;
                 var widthTravelRatio = (e.x - window.innerWidth / 2) / (window.innerWidth / 2);
                 var heighTravelRatio = (e.y - window.innerHeight / 2) / (window.innerHeight / 2);
-                GSAP.to(_this.camera, { alpha: _this.cameraInitialAlpha + ((Math.PI / 9) * widthTravelRatio) * reduction, beta: _this.cameraInitialBeta + ((Math.PI / 7.5) * heighTravelRatio) * reduction, duration: 1 });
-                console.log("camera sway");
+                GSAP.to(_this.camera, { alpha: _this.cameraInitialAlpha - ((Math.PI / 16) * widthTravelRatio), beta: _this.cameraInitialBeta - ((Math.PI / 15) * heighTravelRatio), duration: 2 });
             });
             var zoomResetTimeout_1;
             this.canvas.addEventListener("wheel", function (e) {
