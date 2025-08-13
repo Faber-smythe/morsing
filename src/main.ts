@@ -1,4 +1,5 @@
 window.onload = function () {
+  console.log("ready try")
   const GSAP = window["gsap"]
 
   const Scrollbar = window["Scrollbar"];
