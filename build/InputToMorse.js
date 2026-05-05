@@ -102,7 +102,6 @@ var InputToMorse = /** @class */ (function () {
         // down trigger
         if (!customDownTrigger) {
             this.inputZone.addEventListener("keydown", function (e) {
-                console.log(e.code);
                 if (e.code == "Space")
                     _this.down();
             });
@@ -188,7 +187,6 @@ var InputToMorse = /** @class */ (function () {
             sortedDowns = __spreadArray([], this.recording.signals, true);
         }
         sortedDowns.sort(function (a, b) { return a - b; });
-        console.log(sortedDowns);
         // going through signals to find the biggest difference between two signals
         // this will be the difference between longest dit and shortest dash
         var indexOfShortestDash = 0;
@@ -205,7 +203,6 @@ var InputToMorse = /** @class */ (function () {
         // infering average duration of a dit from all last [30] signals
         var dots = sortedDowns.slice(0, indexOfShortestDash);
         var dashes = sortedDowns.slice(indexOfShortestDash);
-        console.log(dots, dashes);
         if (this.calibration.range >= CALIBRATION_RANGE) {
             this.calibration.range = CALIBRATION_RANGE;
             this.calibration.averageDit =
@@ -247,7 +244,6 @@ var InputToMorse = /** @class */ (function () {
             }
             // find closest match duration-wise within the group
             var ditRatio = value / _this.calibration.averageDit;
-            // console.log("ditRatio for ", value, " : ", ditRatio);
             group.forEach(function (option, u) {
                 var margin = Math.abs(ditRatio - option.ratio);
                 if (!smallestMargin || margin < smallestMargin) {
@@ -257,8 +253,6 @@ var InputToMorse = /** @class */ (function () {
             });
             return group[closestIndex].load;
         });
-        // console.log(recording.signals);
-        console.log(morseReading.join(""));
         return morseReading.join("");
     };
     ;

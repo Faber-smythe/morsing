@@ -1,11 +1,9 @@
 window.onload = function () {
-  console.log("ready try")
-  const GSAP = window["gsap"]
+  const GSAP = window["gsap"];
 
   const Scrollbar = window["Scrollbar"];
-  console.log(Scrollbar)
 
-  const accuracyScoreSpan = document.getElementById('accuracy-score')
+  const accuracyScoreSpan = document.getElementById("accuracy-score");
 
   const sections = {
     about: document.getElementById("about-section"),
@@ -17,20 +15,20 @@ window.onload = function () {
     morse: document.getElementById("morse-icon") as HTMLImageElement,
   };
 
-  Object.values(sections).forEach(section => {
-    console.log(section)
-    if (section.classList.contains("fixed")) return
-    Scrollbar.init(section)
-  })
+  Object.values(sections).forEach((section) => {
+    if (section.classList.contains("fixed")) return;
+    Scrollbar.init(section);
+  });
 
   /**
    * ICON CLICKS TO SLIDE PANELS IN & OUT
    */
   const closeAllSlideSection = () => {
     Object.entries(sections).forEach((sectionEntry) => {
-      if (sectionEntry[1].classList.contains("fixed")) return
+      if (sectionEntry[1].classList.contains("fixed")) return;
       sectionEntry[1].classList.remove("show");
-      iconButtons[sectionEntry[0]].src = `assets/img/${sectionEntry[0]}-icon.png`;
+      iconButtons[sectionEntry[0]].src =
+        `assets/img/${sectionEntry[0]}-icon.png`;
       iconButtons[sectionEntry[0]].title = `Open "${sectionEntry[0]}" section`;
     });
   };
@@ -53,54 +51,71 @@ window.onload = function () {
   /**
    * INSTANTIATE BABYLON CONTROLLER
    */
-  const canvas = sections.babylon.querySelector("canvas") as HTMLCanvasElement
-  const babylonController = new BabylonController(canvas)
-  babylonController.setUp()
-  babylonController.start()
+  const canvas = sections.babylon.querySelector("canvas") as HTMLCanvasElement;
+  const babylonController = new BabylonController(canvas);
+  babylonController.setUp();
+  babylonController.start();
 
   /**
-   * INSTANTIATE MORSE LISTENER CLASS 
+   * INSTANTIATE MORSE LISTENER CLASS
    */
   const morseController = new InputToMorse();
 
   const customDownTrigger = () => {
     document.addEventListener("keydown", (e) => {
       if (e.code == "Space") {
-        morseController.down()
+        morseController.down();
         // TODO babyloncontroller keydown
-        babylonController.switchOnPostLights()
-        
+        babylonController.switchOnPostLights();
+
         // 3D key down
-        const keyAxis = babylonController.scene.meshes.find(mesh => mesh.name == "key-axis")
-        keyAxis.rotationQuaternion = null
-        keyAxis.rotate(BABYLON.Axis.Z, BabylonController.degToRad(8))
+        const keyAxis = babylonController.scene.meshes.find(
+          (mesh) => mesh.name == "key-axis",
+        );
+        keyAxis.rotationQuaternion = null;
+        keyAxis.rotate(BABYLON.Axis.Z, BabylonController.degToRad(8));
       }
-    })
-  }
+    });
+  };
   const customUpTrigger = () => {
     document.addEventListener("keyup", (e) => {
       if (e.code == "Space") {
-        morseController.up()
+        morseController.up();
         if (morseController.accuracyScore) {
-          accuracyScoreSpan.innerHTML = Math.round(morseController.accuracyScore).toString() + "%"
+          accuracyScoreSpan.innerHTML =
+            "Accuracy : " +
+            Math.round(morseController.accuracyScore).toString() +
+            "%";
+        } else {
+          accuracyScoreSpan.innerHTML = "Accuracy : pending calibration...";
         }
         // TODO babyloncontroller keyup
-        babylonController.switchOffPostLights()
+        babylonController.switchOffPostLights();
 
         // 3D key up
-        const keyAxis = babylonController.scene.meshes.find(mesh => mesh.name == "key-axis")
-        keyAxis.rotationQuaternion = null
-        keyAxis.rotate(BABYLON.Axis.Z, BabylonController.degToRad(0))
+        const keyAxis = babylonController.scene.meshes.find(
+          (mesh) => mesh.name == "key-axis",
+        );
+        keyAxis.rotationQuaternion = null;
+        keyAxis.rotate(BABYLON.Axis.Z, BabylonController.degToRad(0));
       }
-    })
-  }
-  document.getElementById("delete-input-icon").addEventListener('click', () => {
-    morseController.wipe(true);
-  })
+    });
+  };
+
+  document
+    .getElementById("delete-input-icon")!
+    .addEventListener("click", () => {
+      morseController.wipe(true);
+      morseController.accuracyScore = null;
+    });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" || e.key === "Esc") {
+      morseController.wipe(true);
+      morseController.accuracyScore = null;
+    }
+  });
 
   morseController.startListening(customDownTrigger, customUpTrigger);
-
-
 
   /**
    * LISTEN TO KEYBOARD EVENTS
@@ -115,6 +130,4 @@ window.onload = function () {
         break;
     }
   });
-
 };
-

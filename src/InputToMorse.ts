@@ -70,7 +70,6 @@ class InputToMorse {
     // down trigger
     if (!customDownTrigger) {
       this.inputZone.addEventListener("keydown", (e) => {
-        console.log(e.code)
         if (e.code == "Space")
           this.down()
       });
@@ -194,7 +193,6 @@ class InputToMorse {
       sortedDowns = [...this.recording.signals];
     }
     sortedDowns.sort((a, b) => a - b);
-    console.log(sortedDowns)
     // going through signals to find the biggest difference between two signals
     // this will be the difference between longest dit and shortest dash
     let indexOfShortestDash = 0;
@@ -212,7 +210,6 @@ class InputToMorse {
     // infering average duration of a dit from all last [30] signals
     const dots = sortedDowns.slice(0, indexOfShortestDash);
     const dashes = sortedDowns.slice(indexOfShortestDash);
-    console.log(dots, dashes)
     if (this.calibration.range >= CALIBRATION_RANGE) {
       this.calibration.range = CALIBRATION_RANGE
       this.calibration.averageDit =
@@ -253,7 +250,6 @@ class InputToMorse {
 
       // find closest match duration-wise within the group
       const ditRatio = value / this.calibration.averageDit;
-      // console.log("ditRatio for ", value, " : ", ditRatio);
       group.forEach((option, u) => {
         const margin = Math.abs(ditRatio - option.ratio);
         if (!smallestMargin || margin < smallestMargin) {
@@ -264,8 +260,6 @@ class InputToMorse {
 
       return group[closestIndex].load;
     });
-    // console.log(recording.signals);
-    console.log(morseReading.join(""));
 
     return morseReading.join("");
   };

@@ -1,9 +1,7 @@
 window.onload = function () {
-    console.log("ready try");
     var GSAP = window["gsap"];
     var Scrollbar = window["Scrollbar"];
-    console.log(Scrollbar);
-    var accuracyScoreSpan = document.getElementById('accuracy-score');
+    var accuracyScoreSpan = document.getElementById("accuracy-score");
     var sections = {
         about: document.getElementById("about-section"),
         morse: document.getElementById("morse-section"),
@@ -14,7 +12,6 @@ window.onload = function () {
         morse: document.getElementById("morse-icon"),
     };
     Object.values(sections).forEach(function (section) {
-        console.log(section);
         if (section.classList.contains("fixed"))
             return;
         Scrollbar.init(section);
@@ -27,7 +24,8 @@ window.onload = function () {
             if (sectionEntry[1].classList.contains("fixed"))
                 return;
             sectionEntry[1].classList.remove("show");
-            iconButtons[sectionEntry[0]].src = "assets/img/".concat(sectionEntry[0], "-icon.png");
+            iconButtons[sectionEntry[0]].src =
+                "assets/img/".concat(sectionEntry[0], "-icon.png");
             iconButtons[sectionEntry[0]].title = "Open \"".concat(sectionEntry[0], "\" section");
         });
     };
@@ -75,7 +73,13 @@ window.onload = function () {
             if (e.code == "Space") {
                 morseController.up();
                 if (morseController.accuracyScore) {
-                    accuracyScoreSpan.innerHTML = Math.round(morseController.accuracyScore).toString() + "%";
+                    accuracyScoreSpan.innerHTML =
+                        "Accuracy : " +
+                            Math.round(morseController.accuracyScore).toString() +
+                            "%";
+                }
+                else {
+                    accuracyScoreSpan.innerHTML = "Accuracy : pending calibration...";
                 }
                 // TODO babyloncontroller keyup
                 babylonController.switchOffPostLights();
@@ -86,8 +90,17 @@ window.onload = function () {
             }
         });
     };
-    document.getElementById("delete-input-icon").addEventListener('click', function () {
+    document
+        .getElementById("delete-input-icon")
+        .addEventListener("click", function () {
         morseController.wipe(true);
+        morseController.accuracyScore = null;
+    });
+    document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape" || e.key === "Esc") {
+            morseController.wipe(true);
+            morseController.accuracyScore = null;
+        }
     });
     morseController.startListening(customDownTrigger, customUpTrigger);
     /**
